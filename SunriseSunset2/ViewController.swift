@@ -7,8 +7,6 @@
 //
 
 import UIKit
-import Alamofire
-import SwiftyJSON
 import GooglePlaces
 
 class ViewController: UIViewController, CLLocationManagerDelegate {
@@ -17,9 +15,9 @@ class ViewController: UIViewController, CLLocationManagerDelegate {
     @IBOutlet weak var sunriseLabel: UILabel!
     @IBOutlet weak var adressLabel: UILabel!
     
-    let webSunLink = "https://sunrise-sunset.org"
     let locationManager = CLLocationManager()
     var sunInfo = SunDataManager()
+    let webSunLink = "https://sunrise-sunset.org"
     
     override func viewDidLoad() {
         super.viewDidLoad()
