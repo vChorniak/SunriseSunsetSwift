@@ -17,14 +17,12 @@ class ViewController: UIViewController, CLLocationManagerDelegate {
     @IBOutlet weak var sunriseLabel: UILabel!
     @IBOutlet weak var adressLabel: UILabel!
     
+    let webSunLink = "https://sunrise-sunset.org"
     let locationManager = CLLocationManager()
-    var placesClient: GMSPlacesClient!
     var sunInfo = SunDataManager()
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        placesClient = GMSPlacesClient.shared()
-        self.locationManager.startUpdatingLocation()
         
         locationManager.delegate = self
         if CLLocationManager.authorizationStatus() == .notDetermined
@@ -37,7 +35,7 @@ class ViewController: UIViewController, CLLocationManagerDelegate {
     
 
     @IBAction func webSunLink(_ sender: UIButton) {
-            if let url = NSURL(string: "https://sunrise-sunset.org") {
+            if let url = NSURL(string: webSunLink) {
                 UIApplication.shared.open(url as URL, options: [ : ], completionHandler: nil)
         }
     }
@@ -67,8 +65,6 @@ class ViewController: UIViewController, CLLocationManagerDelegate {
 
 extension ViewController: GMSAutocompleteViewControllerDelegate {
     func viewController(_ viewController: GMSAutocompleteViewController, didAutocompleteWith place: GMSPlace) {
-        print("Place name: \(place.name)")
-        print("Place address: \(String(describing: place.formattedAddress))")
         dismiss(animated: true, completion: nil)
         self.adressLabel.text = place.name
         sunInfo.getSunDataWith(cordinates: place.coordinate) { (sunrise, sunset) in
