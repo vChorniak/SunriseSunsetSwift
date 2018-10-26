@@ -34,7 +34,7 @@ class ViewController: UIViewController, CLLocationManagerDelegate {
 
     @IBAction func webSunLink(_ sender: UIButton) {
             if let url = NSURL(string: webSunLink) {
-                UIApplication.shared.open(url as URL, options: [ : ], completionHandler: nil)
+                UIApplication.shared.open(url as URL, options: convertToUIApplicationOpenExternalURLOptionsKeyDictionary([ : ]), completionHandler: nil)
         }
     }
     
@@ -86,4 +86,9 @@ extension ViewController: GMSAutocompleteViewControllerDelegate {
     func didUpdateAutocompletePredictions(_ viewController: GMSAutocompleteViewController) {
         UIApplication.shared.isNetworkActivityIndicatorVisible = false
     }
+}
+
+// Helper function inserted by Swift 4.2 migrator.
+fileprivate func convertToUIApplicationOpenExternalURLOptionsKeyDictionary(_ input: [String: Any]) -> [UIApplication.OpenExternalURLOptionsKey: Any] {
+	return Dictionary(uniqueKeysWithValues: input.map { key, value in (UIApplication.OpenExternalURLOptionsKey(rawValue: key), value)})
 }
