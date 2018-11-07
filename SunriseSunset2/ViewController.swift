@@ -30,7 +30,7 @@ class ViewController: UIViewController, CLLocationManagerDelegate {
         
         self.getCurrentLocation()
     }
-    
+   
 
     @IBAction func webSunLink(_ sender: UIButton) {
             if let url = NSURL(string: webSunLink) {

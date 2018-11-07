@@ -20,15 +20,32 @@ class SunDataManager {
         let letCoord = cordinates.latitude
         let longCoord = cordinates.longitude
         
-        Alamofire.request("\(apiString)lat=\(letCoord)&lng=\(longCoord)").responseJSON {
+        Alamofire.request("\(apiString)lat=\(letCoord)&lng=\(longCoord)&formatted=0").responseJSON {
             response in
             if let responseStr = response.result.value {
                 let jsonResponse = JSON(responseStr)
                 let jsonSunInfo = jsonResponse["results"]
-                let sunrise = jsonSunInfo["sunrise"].stringValue
-                let sunset = jsonSunInfo["sunset"].stringValue
+                var sunrise = jsonSunInfo["sunrise"].stringValue
+                var sunset = jsonSunInfo["sunset"].stringValue
+                
+                sunrise = self.dateFormatter(time: sunrise)
+                sunset = self.dateFormatter(time: sunset)
+                
                 completion(sunrise, sunset)
             }
         }
+    }
+    
+    func dateFormatter(time: String) -> String {
+        
+        let dateFormatter = DateFormatter()
+        let tempLocale = dateFormatter.locale
+        dateFormatter.locale = Locale(identifier: "en_US_POSIX")
+        dateFormatter.dateFormat = "yyyy-MM-dd'T'HH:mm:ssZ"
+        let date = dateFormatter.date(from: time)!
+        dateFormatter.dateFormat = "HH:mm:ss"
+        dateFormatter.locale = tempLocale
+        let dateString = dateFormatter.string(from: date)
+        return dateString
     }
 }
