@@ -42,13 +42,13 @@
 	<key>NSLocationAlwaysUsageDescription</key>
 	<string>Required to show data</string>
 	<key>NSLocationWhenInUseUsageDescription</key>
-	<string>Required to show data</string>
+	<string>Show your location on the map</string>
 	<key>NSAppTransportSecurity</key>
 	<dict>
 		<key>NSAllowsArbitraryLoads</key>
 		<true/>
 	</dict>
-    <key>NSLocationWhenInUseUsageDescription</key>
-    <string>Show your location on the map</string>
+	<key>UIStatusBarStyle</key>
+	<string>UIStatusBarStyleLightContent</string>
 </dict>
 </plist>

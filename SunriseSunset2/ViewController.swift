@@ -14,6 +14,7 @@ class ViewController: UIViewController, CLLocationManagerDelegate {
     @IBOutlet weak var sunsetLabel: UILabel!
     @IBOutlet weak var sunriseLabel: UILabel!
     @IBOutlet weak var adressLabel: UILabel!
+    @IBOutlet weak var locationTextLabel: UILabel!
     
     let locationManager = CLLocationManager()
     var sunInfo = SunDataManager()
@@ -41,6 +42,7 @@ class ViewController: UIViewController, CLLocationManagerDelegate {
     // MARK: - Location func
     
     @IBAction func getCurrentPlace(_ sender: UIButton) {
+        self.adressLabel.text = "loading..."
         self.getCurrentLocation()
     }
     
@@ -50,6 +52,8 @@ class ViewController: UIViewController, CLLocationManagerDelegate {
             self.sunInfo.getSunDataWith(cordinates: (place?.coordinate)!, completion: { (sunrise, sunset) in
                 self.sunriseLabel.text = sunrise
                 self.sunsetLabel.text = sunset
+                self.locationTextLabel.text = "Location: ➤"
+                
             })
         }
     }
@@ -68,6 +72,7 @@ extension ViewController: GMSAutocompleteViewControllerDelegate {
         sunInfo.getSunDataWith(cordinates: place.coordinate) { (sunrise, sunset) in
             self.sunriseLabel.text = sunrise
             self.sunsetLabel.text = sunset
+            self.locationTextLabel.text = "Location:   "
         }
     }
     
@@ -85,6 +90,11 @@ extension ViewController: GMSAutocompleteViewControllerDelegate {
     
     func didUpdateAutocompletePredictions(_ viewController: GMSAutocompleteViewController) {
         UIApplication.shared.isNetworkActivityIndicatorVisible = false
+    }
+    
+    // Change status bar color
+    override var preferredStatusBarStyle: UIStatusBarStyle {
+        return .lightContent
     }
 }
 
