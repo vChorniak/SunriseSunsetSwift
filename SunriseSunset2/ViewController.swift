@@ -32,7 +32,6 @@ class ViewController: UIViewController, CLLocationManagerDelegate {
         self.adressLabel.text = "Select your option"
     }
    
-
     @IBAction func webSunLink(_ sender: UIButton) {
             if let url = NSURL(string: webSunLink) {
                 UIApplication.shared.open(url as URL, options: convertToUIApplicationOpenExternalURLOptionsKeyDictionary([ : ]), completionHandler: nil)
@@ -45,9 +44,7 @@ class ViewController: UIViewController, CLLocationManagerDelegate {
         if Reachability.isConnected() {
             checkAndGetLocation()
         } else {
-            self.adressLabel.text = "No internet connection"
-            self.cancelTime()
-            self.locationTextLabel.text = "Error:"
+            internetAlert()
         }
     }
     
@@ -58,23 +55,22 @@ class ViewController: UIViewController, CLLocationManagerDelegate {
             self.sunInfo.getSunDataWith(cordinates: (place?.coordinate)!, completion: { (sunrise, sunset) in
                 self.sunriseLabel.text = sunrise
                 self.sunsetLabel.text = sunset
-                
             })
         }
     }
     
     func checkAndGetLocation() {
-        self.cancelTime()
         if CLLocationManager.locationServicesEnabled() {
             switch CLLocationManager.authorizationStatus() {
             case .notDetermined, .restricted, .denied:
-                self.locationError()
+                locationAlert()
             case .authorizedAlways, .authorizedWhenInUse:
+                cancelTime()
                 self.adressLabel.text = "loading..."
-                self.getCurrentLocation()
+                getCurrentLocation()
             }
         } else {
-            self.locationError()
+            self.locationAlert()
         }
     }
     
@@ -84,19 +80,12 @@ class ViewController: UIViewController, CLLocationManagerDelegate {
         present(autocompleteController, animated: true, completion: nil)
     }
     
-    // Helper functions:
     func cancelTime() {
         self.locationTextLabel.text = " "
         self.sunriseLabel.text = "-"
         self.sunsetLabel.text = "-"
     }
     
-    func locationError() {
-        self.locationTextLabel.text = "Error:"
-        self.adressLabel.text = "location services disabled"
-    }
-    
-    // Change status bar color
     override var preferredStatusBarStyle: UIStatusBarStyle {
         return .lightContent
     }
@@ -110,7 +99,6 @@ extension ViewController: GMSAutocompleteViewControllerDelegate {
         sunInfo.getSunDataWith(cordinates: place.coordinate) { (sunrise, sunset) in
             self.sunriseLabel.text = sunrise
             self.sunsetLabel.text = sunset
-            self.locationTextLabel.text = "Location:   "
         }
     }
     
@@ -130,7 +118,22 @@ extension ViewController: GMSAutocompleteViewControllerDelegate {
         UIApplication.shared.isNetworkActivityIndicatorVisible = false
     }
     
-
+    
+    // MARK: - Alert functions
+    
+    func internetAlert() {
+        let alert = UIAlertController(title: "No internet connection", message: "Please, connect to the Internet and try again.", preferredStyle: .alert)
+        let action = UIAlertAction(title: "OK", style: .default, handler: nil)
+        alert.addAction(action)
+        present(alert, animated: true, completion: nil)
+    }
+    
+    func locationAlert() {
+        let alert = UIAlertController(title: "Location services disabled", message: "To identify the information for your current location please, enable location services and try again.", preferredStyle: .alert)
+        let action = UIAlertAction(title: "OK", style: .default, handler: nil)
+        alert.addAction(action)
+        present(alert, animated: true, completion: nil)
+    }
 }
 
 // Helper function inserted by Swift 4.2 migrator.
