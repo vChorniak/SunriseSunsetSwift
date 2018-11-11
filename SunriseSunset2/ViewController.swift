@@ -44,11 +44,11 @@ class ViewController: UIViewController, CLLocationManagerDelegate {
         if Reachability.isConnected() {
             checkAndGetLocation()
         } else {
-            internetAlert()
+            showInternetAlert()
         }
     }
     
-    func getCurrentLocation() {
+    func getDataForCurrentLocation() {
         LocationManager.shared.getLocation { (place, coordinates) in
             self.locationTextLabel.text = "Location: ➤"
             self.adressLabel.text = place?.name
@@ -63,14 +63,14 @@ class ViewController: UIViewController, CLLocationManagerDelegate {
         if CLLocationManager.locationServicesEnabled() {
             switch CLLocationManager.authorizationStatus() {
             case .notDetermined, .restricted, .denied:
-                locationAlert()
+                showLocationAlert()
             case .authorizedAlways, .authorizedWhenInUse:
                 cancelTime()
                 self.adressLabel.text = "loading..."
-                getCurrentLocation()
+                getDataForCurrentLocation()
             }
         } else {
-            self.locationAlert()
+            self.showLocationAlert()
         }
     }
     
@@ -121,14 +121,14 @@ extension ViewController: GMSAutocompleteViewControllerDelegate {
     
     // MARK: - Alert functions
     
-    func internetAlert() {
+    func showInternetAlert() {
         let alert = UIAlertController(title: "No internet connection", message: "Please, connect to the Internet and try again.", preferredStyle: .alert)
         let action = UIAlertAction(title: "OK", style: .default, handler: nil)
         alert.addAction(action)
         present(alert, animated: true, completion: nil)
     }
     
-    func locationAlert() {
+    func showLocationAlert() {
         let alert = UIAlertController(title: "Location services disabled", message: "To identify the information for your current location please, enable location services and try again.", preferredStyle: .alert)
         let action = UIAlertAction(title: "OK", style: .default, handler: nil)
         alert.addAction(action)
