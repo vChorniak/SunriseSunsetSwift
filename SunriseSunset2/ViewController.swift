@@ -10,31 +10,32 @@ import UIKit
 import GooglePlaces
 
 class ViewController: UIViewController, CLLocationManagerDelegate {
-
+    
     @IBOutlet weak var sunsetLabel: UILabel!
     @IBOutlet weak var sunriseLabel: UILabel!
     @IBOutlet weak var adressLabel: UILabel!
     @IBOutlet weak var locationTextLabel: UILabel!
+    @IBOutlet weak var currentDateLabel: UILabel!
+    
     
     let locationManager = CLLocationManager()
-    var sunInfo = SunDataManager()
+    let dateFormat = DateFormat()
+    private var sunModels: [SunData] = []
     let webSunLink = "https://sunrise-sunset.org"
+    
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        
         locationManager.delegate = self
-        if CLLocationManager.authorizationStatus() == .notDetermined
-        {
+        if CLLocationManager.authorizationStatus() == .notDetermined {
             locationManager.requestWhenInUseAuthorization()
         }
         self.locationManager.startUpdatingLocation()
-        self.adressLabel.text = "Select your option"
     }
-   
+    
     @IBAction func webSunLink(_ sender: UIButton) {
-            if let url = NSURL(string: webSunLink) {
-                UIApplication.shared.open(url as URL, options: convertToUIApplicationOpenExternalURLOptionsKeyDictionary([ : ]), completionHandler: nil)
+        if let url = NSURL(string: webSunLink) {
+            UIApplication.shared.open(url as URL, options: convertToUIApplicationOpenExternalURLOptionsKeyDictionary([ : ]), completionHandler: nil)
         }
     }
     
@@ -42,35 +43,23 @@ class ViewController: UIViewController, CLLocationManagerDelegate {
     
     @IBAction func getCurrentPlace(_ sender: UIButton) {
         if Reachability.isConnected() {
-            checkAndGetLocation()
+            getDataForCurrentLocation()
         } else {
-            showInternetAlert()
+            self.showAlert(withTitle: "No Interner Connection", andMessage: "Please, connect to the Internet and try again.")
         }
     }
     
     func getDataForCurrentLocation() {
-        LocationManager.shared.getLocation { (place, coordinates) in
+        self.cancelTime()
+        self.adressLabel.text = "loading..."
+        LocationManager.shared.getLocation(completion: {  (place, coordinates)  in
             self.locationTextLabel.text = "Location: ➤"
             self.adressLabel.text = place?.name
-            self.sunInfo.getSunDataWith(cordinates: (place?.coordinate)!, completion: { (sunrise, sunset) in
-                self.sunriseLabel.text = sunrise
-                self.sunsetLabel.text = sunset
-            })
-        }
-    }
-    
-    func checkAndGetLocation() {
-        if CLLocationManager.locationServicesEnabled() {
-            switch CLLocationManager.authorizationStatus() {
-            case .notDetermined, .restricted, .denied:
-                showLocationAlert()
-            case .authorizedAlways, .authorizedWhenInUse:
-                cancelTime()
-                self.adressLabel.text = "loading..."
-                getDataForCurrentLocation()
-            }
-        } else {
-            self.showLocationAlert()
+            self.getSunInformation(coordinate: (place?.coordinate)!)
+        }) { (error) in
+            self.showAlert(withTitle: "Pick Place Error", andMessage: error.localizedDescription)
+            self.adressLabel.text = "Pick Place Error"
+            self.cancelTime()
         }
     }
     
@@ -86,24 +75,39 @@ class ViewController: UIViewController, CLLocationManagerDelegate {
         self.sunsetLabel.text = "-"
     }
     
+    
     override var preferredStatusBarStyle: UIStatusBarStyle {
         return .lightContent
+    }
+    
+    func getSunInformation(coordinate cord: CLLocationCoordinate2D) {
+        NetworkManager.shared.getSunInfo(coordinates: (cord)) { [weak self] result in
+            switch result {
+            case .result(let models):
+                self?.sunModels = [models]
+                self!.sunriseLabel.text = self?.dateFormat.dateFormatter(time: (models.results?.sunrise)!)
+                self?.sunsetLabel.text = self?.dateFormat.dateFormatter(time: (models.results?.sunset)!)
+            case .error(let error):
+                self?.showAlert(withTitle: "Error", andMessage: error.localizedDescription)
+                self?.cancelTime()
+            }
+        }
     }
 }
 
 extension ViewController: GMSAutocompleteViewControllerDelegate {
     func viewController(_ viewController: GMSAutocompleteViewController, didAutocompleteWith place: GMSPlace) {
         dismiss(animated: true, completion: nil)
+        self.cancelTime()
         self.locationTextLabel.text = "Location: "
         self.adressLabel.text = place.name
-        sunInfo.getSunDataWith(cordinates: place.coordinate) { (sunrise, sunset) in
-            self.sunriseLabel.text = sunrise
-            self.sunsetLabel.text = sunset
-        }
+        self.getSunInformation(coordinate: place.coordinate)
+        
     }
     
     func viewController(_ viewController: GMSAutocompleteViewController, didFailAutocompleteWithError error: Error) {
         print("Error: ", error.localizedDescription)
+        self.showAlert(withTitle: "Error", andMessage: error.localizedDescription)
     }
     
     func wasCancelled(_ viewController: GMSAutocompleteViewController) {
@@ -121,15 +125,8 @@ extension ViewController: GMSAutocompleteViewControllerDelegate {
     
     // MARK: - Alert functions
     
-    func showInternetAlert() {
-        let alert = UIAlertController(title: "No internet connection", message: "Please, connect to the Internet and try again.", preferredStyle: .alert)
-        let action = UIAlertAction(title: "OK", style: .default, handler: nil)
-        alert.addAction(action)
-        present(alert, animated: true, completion: nil)
-    }
-    
-    func showLocationAlert() {
-        let alert = UIAlertController(title: "Location services disabled", message: "To identify the information for your current location please, enable location services and try again.", preferredStyle: .alert)
+    func showAlert(withTitle title: String, andMessage message: String) {
+        let alert = UIAlertController(title: title, message: message, preferredStyle: .alert)
         let action = UIAlertAction(title: "OK", style: .default, handler: nil)
         alert.addAction(action)
         present(alert, animated: true, completion: nil)
@@ -138,5 +135,5 @@ extension ViewController: GMSAutocompleteViewControllerDelegate {
 
 // Helper function inserted by Swift 4.2 migrator.
 fileprivate func convertToUIApplicationOpenExternalURLOptionsKeyDictionary(_ input: [String: Any]) -> [UIApplication.OpenExternalURLOptionsKey: Any] {
-	return Dictionary(uniqueKeysWithValues: input.map { key, value in (UIApplication.OpenExternalURLOptionsKey(rawValue: key), value)})
+    return Dictionary(uniqueKeysWithValues: input.map { key, value in (UIApplication.OpenExternalURLOptionsKey(rawValue: key), value)})
 }

@@ -14,10 +14,12 @@ class LocationManager {
     static let shared = LocationManager()
     var placesClient = GMSPlacesClient.shared()
     
-    func getLocation(completion: @escaping ((_ place: GMSPlace?, _ coordinates: CLLocationCoordinate2D?) -> Void)) {
+    func getLocation(completion: @escaping ((_ place: GMSPlace?, _ coordinates: CLLocationCoordinate2D?) -> Void),
+                     failure: ((_ error: Error) -> Void)?) {
         placesClient.currentPlace(callback: { (placeLikelihoodList, error) -> Void in
             if let error = error {
                 print("Pick Place error: \(error.localizedDescription)")
+                failure?(error)
                 return
             }
             

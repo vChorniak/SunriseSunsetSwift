@@ -17,8 +17,10 @@
 		CE2D7F02216FB814009F9FE8 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = CE2D7F00216FB814009F9FE8 /* LaunchScreen.storyboard */; };
 		CE2D7F0D216FB814009F9FE8 /* SunriseSunset2Tests.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE2D7F0C216FB814009F9FE8 /* SunriseSunset2Tests.swift */; };
 		CE2D7F18216FB814009F9FE8 /* SunriseSunset2UITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE2D7F17216FB814009F9FE8 /* SunriseSunset2UITests.swift */; };
+		CE8C15A921A5FC470099E62E /* DateFormat.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE8C15A821A5FC470099E62E /* DateFormat.swift */; };
+		CE8C15AB21A5FC6A0099E62E /* NetworkManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE8C15AA21A5FC6A0099E62E /* NetworkManager.swift */; };
+		CE8C15AD21A5FCD70099E62E /* SunData.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE8C15AC21A5FCD70099E62E /* SunData.swift */; };
 		CE9F31782180B8A300E9CB2D /* LocationManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE9F31772180B8A300E9CB2D /* LocationManager.swift */; };
-		CE9F317A2180BCDF00E9CB2D /* SunDataManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE9F31792180BCDF00E9CB2D /* SunDataManager.swift */; };
 		CEF167ED21945B750067077D /* CheckInternetConnection.swift in Sources */ = {isa = PBXBuildFile; fileRef = CEF167EC21945B750067077D /* CheckInternetConnection.swift */; };
 /* End PBXBuildFile section */
 
@@ -60,8 +62,10 @@
 		CE2D7F13216FB814009F9FE8 /* SunriseSunset2UITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = SunriseSunset2UITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		CE2D7F17216FB814009F9FE8 /* SunriseSunset2UITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SunriseSunset2UITests.swift; sourceTree = "<group>"; };
 		CE2D7F19216FB814009F9FE8 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		CE8C15A821A5FC470099E62E /* DateFormat.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DateFormat.swift; sourceTree = "<group>"; };
+		CE8C15AA21A5FC6A0099E62E /* NetworkManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NetworkManager.swift; sourceTree = "<group>"; };
+		CE8C15AC21A5FCD70099E62E /* SunData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SunData.swift; sourceTree = "<group>"; };
 		CE9F31772180B8A300E9CB2D /* LocationManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocationManager.swift; sourceTree = "<group>"; };
-		CE9F31792180BCDF00E9CB2D /* SunDataManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SunDataManager.swift; sourceTree = "<group>"; };
 		CEF167EC21945B750067077D /* CheckInternetConnection.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CheckInternetConnection.swift; sourceTree = "<group>"; };
 		EF82037C3EC9DED24DDD6115 /* Pods-SunriseSunset2Tests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-SunriseSunset2Tests.release.xcconfig"; path = "Pods/Target Support Files/Pods-SunriseSunset2Tests/Pods-SunriseSunset2Tests.release.xcconfig"; sourceTree = "<group>"; };
 		FA2997BEE338922914DD18EA /* Pods_SunriseSunset2Tests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_SunriseSunset2Tests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -145,7 +149,9 @@
 			children = (
 				CE2D7EF7216FB812009F9FE8 /* AppDelegate.swift */,
 				CE2D7EF9216FB812009F9FE8 /* ViewController.swift */,
-				CE9F31792180BCDF00E9CB2D /* SunDataManager.swift */,
+				CE8C15AC21A5FCD70099E62E /* SunData.swift */,
+				CE8C15A821A5FC470099E62E /* DateFormat.swift */,
+				CE8C15AA21A5FC6A0099E62E /* NetworkManager.swift */,
 				CE9F31772180B8A300E9CB2D /* LocationManager.swift */,
 				CEF167EC21945B750067077D /* CheckInternetConnection.swift */,
 				CE2D7EFB216FB812009F9FE8 /* Main.storyboard */,
@@ -408,10 +414,12 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				CE8C15AD21A5FCD70099E62E /* SunData.swift in Sources */,
 				CE2D7EFA216FB812009F9FE8 /* ViewController.swift in Sources */,
 				CEF167ED21945B750067077D /* CheckInternetConnection.swift in Sources */,
+				CE8C15A921A5FC470099E62E /* DateFormat.swift in Sources */,
+				CE8C15AB21A5FC6A0099E62E /* NetworkManager.swift in Sources */,
 				CE2D7EF8216FB812009F9FE8 /* AppDelegate.swift in Sources */,
-				CE9F317A2180BCDF00E9CB2D /* SunDataManager.swift in Sources */,
 				CE9F31782180B8A300E9CB2D /* LocationManager.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
